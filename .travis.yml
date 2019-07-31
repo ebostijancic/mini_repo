@@ -9,18 +9,30 @@ otp_release:
 sevices:
   - docker
 
+stages:
+  - test
+  - build
+  - name: push
+    if: branch == docker-push
+
 jobs:
   include:
-    - stage: "Tests"
+    - stage: test
       name: "Unit Tests"
       script: 
         - mix deps.get
         - mix test
-    - stage: "Docker"
+
+    - stage: build
       name: "Docker Build"
       script:
         - docker build -t ebostijancic/mini_repo --no-cache .
+
+    - stage: push
+      name: "Push docker image"
+      script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker push ebostijancic/mini_repo
+
       
 
