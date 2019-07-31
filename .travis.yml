@@ -20,5 +20,7 @@ jobs:
       name: "Docker Build"
       script:
         - docker build -t ebostijancic/mini_repo --no-cache .
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker push ebostijancic/mini_repo
       
 
