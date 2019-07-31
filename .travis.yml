@@ -6,8 +6,19 @@ elixir:
 otp_release:
   - '22.0.4'
 
-script:
-  - mix deps.get
-  - mix compile
-  - mix test
+sevices:
+  - docker
+
+jobs:
+  include:
+    - stage: "Tests"
+      name: "Unit Tests"
+      script: 
+        - mix deps.get
+        - mix test
+    - stage: "Docker"
+      name: "Docker Build"
+      script:
+        - docker build -t ebostijancic/mini_repo --no-cache .
+      
 
